@@ -1,23 +1,32 @@
 #include "part1.h"
 #include <iostream>
 
-char* string_copy(char* dest, unsigned int destsize, char* src)
+// Safe string copy – prevents overflow
+char* string_copy(char* dest, unsigned int destsize, const char* src)
 {
-	char* ret = dest;
-	//the if in the while was with only one = so its not if so we add += so == so if
-	while (*dest++ == *src++)
-		;
-	return ret;
+    if (destsize == 0)
+        return dest;
+
+    unsigned int i = 0;
+
+    // Copy only until destsize-1 to leave space for null terminator
+    for (; i < destsize - 1 && src[i] != '\0'; i++)
+    {
+        dest[i] = src[i];
+    }
+
+    dest[i] = '\0'; // Always null-terminate
+    return dest;
 }
 
 void part1()
 {
-	char password[] = "secret";
-	char dest[12];
-	char src[] = "hello world!";
+    char password[] = "secret";
+    char dest[12];
+    char src[] = "hello world!";
 
-	string_copy(dest, 12, src);
+    string_copy(dest, sizeof(dest), src);
 
-	std::cout << src << std::endl;
-	std::cout << dest << std::endl;
+    std::cout << src << std::endl;
+    std::cout << dest << std::endl;
 }
